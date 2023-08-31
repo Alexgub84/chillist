@@ -4,6 +4,8 @@ export interface ListRow {
 	ownerName: string | undefined
 	price: number | undefined
 	notes: string
+	amountType: 'units' | 'grams'
+	amount: number | undefined
 	status: 'PENDING' | 'PURCHASED'
 	createdAt: Date
 	updatedAt: Date
@@ -35,6 +37,8 @@ const listFakeData = [
 		name: 'Tent',
 		ownerName: 'John Doe',
 		price: 100,
+		amountType: 'units',
+		amount: 1,
 		notes: 'This is a 2-person tent',
 		status: 'PENDING',
 		createdAt: new Date('2023-08-01T00:00:00Z'),
@@ -45,6 +49,8 @@ const listFakeData = [
 		name: 'Sleeping Bag',
 		ownerName: undefined,
 		price: 150,
+		amountType: 'units',
+		amount: 1,
 		notes: 'This is a warm sleeping bag',
 		status: 'PURCHASED',
 		createdAt: new Date('2023-08-02T00:00:00Z'),
@@ -55,6 +61,8 @@ const listFakeData = [
 		name: 'Camping Stove',
 		ownerName: 'John Smith',
 		price: 200,
+		amountType: 'units',
+		amount: 1,
 		notes: 'This is a portable camping stove',
 		status: 'PENDING',
 		createdAt: new Date('2023-08-03T00:00:00Z'),
@@ -65,6 +73,8 @@ const listFakeData = [
 		name: 'Backpack',
 		ownerName: undefined,
 		price: 250,
+		amountType: 'units',
+		amount: 1,
 		notes: 'This is a 60L backpack',
 		status: 'PURCHASED',
 		createdAt: new Date('2023-08-04T00:00:00Z'),
@@ -75,6 +85,8 @@ const listFakeData = [
 		name: 'Camping Lantern',
 		ownerName: 'Jane Doe',
 		price: 300,
+		amountType: 'units',
+		amount: 1,
 		notes: 'This is a rechargeable camping lantern',
 		status: 'PENDING',
 		createdAt: new Date('2023-08-05T00:00:00Z'),
@@ -104,6 +116,15 @@ export default function List() {
 								</option>
 							))}
 						</select>
+						<label htmlFor="price">Price: </label>
+						<input
+							type="number"
+							name="price"
+							id="price"
+							value={row.price ? row.price : ''}
+						/>
+						<label htmlFor="amount">Amount</label>
+						<input type="number" name="amount" id="amount" value={row.} />
 						<label htmlFor="status">Status: </label>
 						<select name="status" id="status" value={row.status}>
 							<option value="PENDING">PENDING</option>
