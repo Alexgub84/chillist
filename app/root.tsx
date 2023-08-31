@@ -245,23 +245,14 @@ function App() {
 				<header className="container py-6">
 					<nav className="flex items-center justify-between">
 						<Link to="/">
-							<div className="font-light">epic</div>
-							<div className="font-bold">notes</div>
+							<div className="font-light">Home</div>
 						</Link>
-						{isOnSearchPage ? null : (
-							<div className="ml-auto max-w-sm flex-1 pr-10">
-								<SearchBar status="idle" />
-							</div>
-						)}
-						<div className="flex items-center gap-10">
-							{user ? (
-								<UserDropdown />
-							) : (
-								<Button asChild variant="default" size="sm">
-									<Link to="/login">Log In</Link>
-								</Button>
-							)}
-						</div>
+						<Link to="/trip-info">
+							<div className="font-light">Trip info</div>
+						</Link>
+						<Link to="/list">
+							<div className="font-light">List</div>
+						</Link>
 					</nav>
 				</header>
 
