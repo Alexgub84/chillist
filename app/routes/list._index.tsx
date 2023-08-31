@@ -99,7 +99,9 @@ export default function List() {
 							value={row.ownerName ? row.ownerName : ''}
 						>
 							{tripInfoFakeData.participants.map(participant => (
-								<option value={participant}>{participant}</option>
+								<option key={participant} value={participant}>
+									{participant}
+								</option>
 							))}
 						</select>
 						<label htmlFor="status">Status: </label>
