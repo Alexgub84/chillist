@@ -1,4 +1,4 @@
-app = "chillist-16bb"
+app = "chillist"
 primary_region = "lhr"
 kill_signal = "SIGINT"
 kill_timeout = 5
