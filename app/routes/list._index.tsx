@@ -124,7 +124,7 @@ export default function List() {
 							value={row.price ? row.price : ''}
 						/>
 						<label htmlFor="amount">Amount</label>
-						<input type="number" name="amount" id="amount" value={row.} />
+						<input type="number" name="amount" id="amount" value={row.amount} />
 						<label htmlFor="status">Status: </label>
 						<select name="status" id="status" value={row.status}>
 							<option value="PENDING">PENDING</option>
