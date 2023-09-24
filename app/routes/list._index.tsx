@@ -1,3 +1,7 @@
+import { prisma } from '#app/utils/db.server.ts'
+import { invariantResponse } from '#app/utils/misc.tsx'
+import { DataFunctionArgs } from '@remix-run/node'
+
 export interface ListRow {
 	id: string
 	name: string
@@ -11,7 +15,7 @@ export interface ListRow {
 	updatedAt: Date
 }
 
-export interface TripInfo {
+export interface Event {
 	id: string
 	name: string
 	participants: string[]
@@ -21,7 +25,7 @@ export interface TripInfo {
 	tripOwner: string
 }
 
-const tripInfoFakeData = {
+const EventFakeData = {
 	id: '1',
 	name: 'Trip 1',
 	participants: ['John Doe', 'Jane Doe'],
@@ -94,6 +98,25 @@ const listFakeData = [
 	},
 ]
 
+export async function loader({ params }: DataFunctionArgs) {
+	const user = await prisma.user.findFirst({
+		select: {
+			id: true,
+			name: true,
+			username: true,
+			createdAt: true,
+			image: { select: { id: true } },
+		},
+		where: {
+			username: params.username,
+		},
+	})
+
+	invariantResponse(user, ',list not found', { status: 404 })
+
+	return json({ user, userJoinedDisplay: user.createdAt.toLocaleDateString() })
+}
+
 export default function List() {
 	return (
 		<main>
@@ -110,7 +133,7 @@ export default function List() {
 							id="ownerName"
 							value={row.ownerName ? row.ownerName : ''}
 						>
-							{tripInfoFakeData.participants.map(participant => (
+							{EventFakeData.participants.map(participant => (
 								<option key={participant} value={participant}>
 									{participant}
 								</option>

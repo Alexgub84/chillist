@@ -20,7 +20,7 @@ async function seed() {
 	console.timeEnd('🧹 Cleaned up the database...')
 
 	console.time('🔑 Created permissions...')
-	const entities = ['user', 'note']
+	const entities = ['user', 'note', 'event', 'listItem']
 	const actions = ['create', 'read', 'update', 'delete']
 	const accesses = ['own', 'any'] as const
 	for (const entity of entities) {
@@ -102,7 +102,53 @@ async function seed() {
 			})
 	}
 	console.timeEnd(`👤 Created ${totalUsers} users...`)
+	console.time('🌍 Created trips...')
+	for (let index = 0; index < totalUsers; index++) {
+		const randomUser = await prisma.user.findFirst({
+			orderBy: { id: 'asc' },
+		})
 
+		if (randomUser) {
+			await prisma.trip.create({
+				data: {
+					name: `Trip ${index + 1}`,
+					destination: faker.address.city(),
+					startDate: faker.date.future(),
+					endDate: faker.date.future(),
+					userId: randomUser.id,
+				},
+			})
+		}
+	}
+	console.timeEnd('🌍 Created trips...')
+
+	// console.time('📋 Created lists...')
+	// const allTrips = await prisma.trip.findMany()
+	// for (const trip of allTrips) {
+	// 	await prisma.list.create({
+	// 		data: {
+	// 			name: `List for ${trip.name}`,
+	// 			items: {
+	// 				create: [
+	// 					{
+	// 						name: 'Passport',
+	// 						checked: false,
+	// 					},
+	// 					{
+	// 						name: 'Tickets',
+	// 						checked: true,
+	// 					},
+	// 					{
+	// 						name: 'Luggage',
+	// 						checked: false,
+	// 					},
+	// 				],
+	// 			},
+	// 			tripId: trip.id,
+	// 		},
+	// 	})
+	// }
+	// console.timeEnd('📋 Created lists...')
 	console.time(`🐨 Created admin user "kody"`)
 
 	const kodyImages = await promiseHash({
