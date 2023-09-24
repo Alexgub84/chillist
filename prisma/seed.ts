@@ -102,24 +102,24 @@ async function seed() {
 			})
 	}
 	console.timeEnd(`👤 Created ${totalUsers} users...`)
-	console.time('🌍 Created trips...')
-	for (let index = 0; index < totalUsers; index++) {
-		const randomUser = await prisma.user.findFirst({
-			orderBy: { id: 'asc' },
-		})
+	// console.time('🌍 Created trips...')
+	// for (let index = 0; index < totalUsers; index++) {
+	// 	const randomUser = await prisma.user.findFirst({
+	// 		orderBy: { id: 'asc' },
+	// 	})
 
-		if (randomUser) {
-			await prisma.trip.create({
-				data: {
-					name: `Trip ${index + 1}`,
-					destination: faker.address.city(),
-					startDate: faker.date.future(),
-					endDate: faker.date.future(),
-					userId: randomUser.id,
-				},
-			})
-		}
-	}
+	// 	if (randomUser) {
+	// 		await prisma.trip.create({
+	// 			data: {
+	// 				name: `Trip ${index + 1}`,
+	// 				destination: faker.address.city(),
+	// 				startDate: faker.date.future(),
+	// 				endDate: faker.date.future(),
+	// 				userId: randomUser.id,
+	// 			},
+	// 		})
+	// 	}
+	// }
 	console.timeEnd('🌍 Created trips...')
 
 	// console.time('📋 Created lists...')
