@@ -234,8 +234,8 @@ function App() {
 						<Link to="/trip-info">
 							<div className="font-light">Trip info</div>
 						</Link>
-						<Link to="/list">
-							<div className="font-light">List</div>
+						<Link to="/event">
+							<div className="font-light">Events</div>
 						</Link>
 					</nav>
 				</header>

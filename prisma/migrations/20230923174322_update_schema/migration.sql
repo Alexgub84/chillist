@@ -20,5 +20,5 @@ CREATE TABLE "Event" (
     "startDate" DATETIME NOT NULL,
     "endDate" DATETIME NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "tripOwner" TEXT NOT NULL
+    "eventOwner" TEXT NOT NULL
 );

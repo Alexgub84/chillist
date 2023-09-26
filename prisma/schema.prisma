@@ -10,33 +10,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Event {
+  id           String        @id @default(cuid())
+  name         String
+  participants Patricipant[] // Use String to manually serialize/deserialize an array of strings
+  startDate    DateTime
+  endDate      DateTime
+  createdAt    DateTime      @default(now())
+  eventOwner   String
+  lists        ListRow[]
 
+  @@index([eventOwner])
+}
+
+model Patricipant {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String?
+}
 
 model ListRow {
-  id         String    @id @default(cuid())
+  id         String   @id @default(cuid())
   name       String
-  ownerName  String  // Allow null values with the '?' modifier
-  price      Float?   // Use Float type to accommodate undefined values
+  ownerName  String // Allow null values with the '?' modifier
+  price      Float? // Use Float type to accommodate undefined values
   notes      String
-  amountType String   // Use string to represent 'units' or 'grams'
-  amount     Float?   // Use Float type to accommodate undefined values
-  status     String   // Use string to represent 'PENDING' or 'PURCHASED'
+  amountType String // Use string to represent 'units' or 'grams'
+  amount     Float? // Use Float type to accommodate undefined values
+  status     String // Use string to represent 'PENDING' or 'PURCHASED'
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
+  Event   Event?  @relation(fields: [eventId], references: [id])
+  eventId String?
+
+  @@index([ownerName])
+  @@index([eventId])
 }
-
-model Event {
-  id       String  @id @default(cuid())
-  name         String
-  participants String   // Use String to manually serialize/deserialize an array of strings
-  startDate    DateTime
-  endDate      DateTime
-  createdAt    DateTime @default(now())
-  tripOwner    String
-
-}
-
 
 model User {
   id       String  @id @default(cuid())
