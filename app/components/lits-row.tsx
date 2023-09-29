@@ -1,8 +1,14 @@
 import { Form, Link, useSubmit } from '@remix-run/react'
 
-import type { ListRow } from '../routes/event._index.tsx'
+import type { ListRow } from '../routes/events._index.tsx'
 
-export function ListRow({ list }: { list: ListRow }) {
+export function ListRow({
+	list,
+	handleListEdited,
+}: {
+	list: ListRow
+	handleListEdited: (event: React.ChangeEvent<HTMLSelectElement>) => void
+}) {
 	return (
 		<div key={list.id}>
 			<label htmlFor={`name-${list.id}-${list.name}`}>Name: </label>
@@ -46,6 +52,7 @@ export function ListRow({ list }: { list: ListRow }) {
 				name="status"
 				id={`status-${list.id}-${list.status}`}
 				defaultValue={list.status}
+				// onSelect={handleListEdited}
 			>
 				<option value="PENDING">PENDING</option>
 				<option value="PURCHASED">PURCHASED</option>
@@ -57,6 +64,7 @@ export function ListRow({ list }: { list: ListRow }) {
 				id={`notes-${list.id}-${list.notes}`}
 				defaultValue={list.notes}
 			/>
+			<button type="submit">save</button>
 		</div>
 	)
 }

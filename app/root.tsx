@@ -176,7 +176,7 @@ export async function action({ request }: DataFunctionArgs) {
 	const { theme } = submission.value
 
 	const responseInit = {
-		headers: { 'set-cookie': setTheme(theme) },
+		headers: { 'set-cookie': setTheme('light') },
 	}
 	return json({ success: true, submission }, responseInit)
 }
@@ -231,10 +231,7 @@ function App() {
 						<Link to="/">
 							<div className="font-light">Home</div>
 						</Link>
-						<Link to="/trip-info">
-							<div className="font-light">Trip info</div>
-						</Link>
-						<Link to="/event">
+						<Link to="/events">
 							<div className="font-light">Events</div>
 						</Link>
 					</nav>
@@ -242,15 +239,16 @@ function App() {
 
 				<div className="flex-1">
 					<Outlet />
+					<LiveReload />
 				</div>
-
+				{/* 
 				<div className="container flex justify-between pb-5">
 					<Link to="/">
 						<div className="font-light">epic</div>
 						<div className="font-bold">notes</div>
 					</Link>
 					<ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
-				</div>
+				</div> */}
 			</div>
 			<Confetti id={data.confettiId} />
 			<EpicToaster toast={data.toast} />
