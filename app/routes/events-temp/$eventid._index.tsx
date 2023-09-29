@@ -8,7 +8,7 @@ import {
 	useSubmit,
 } from '@remix-run/react'
 
-import { prisma } from '../utils/db.server.ts'
+import { prisma } from '../../utils/db.server.ts'
 import { ListRow } from '#app/components/lits-row.tsx'
 
 import { invariantResponse } from '#app/utils/misc.tsx'
@@ -22,10 +22,10 @@ import { useState } from 'react'
 // 	return null
 // }
 
-export default function Event() {
+export default function EventIndex() {
 	return (
 		<section>
-			<h1>event</h1>
+			<h1>Index</h1>
 
 			{/* <Form method="post">
 				{lists.map(row => (

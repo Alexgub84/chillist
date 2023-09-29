@@ -1,21 +1,3 @@
-import { json, redirect, ActionArgs, LoaderArgs } from '@remix-run/node'
-import {
-	Form,
-	Link,
-	Outlet,
-	isRouteErrorResponse,
-	useLoaderData,
-	useParams,
-	useRouteError,
-	useSubmit,
-} from '@remix-run/react'
-
-import { prisma } from '../utils/db.server.ts'
-import { ListRow } from '#app/components/lits-row.tsx'
-
-import { invariantResponse } from '#app/utils/misc.tsx'
-import { useState } from 'react'
-
 export interface ListRow {
 	id: string
 	name: string
@@ -40,7 +22,7 @@ export interface Event {
 	lists: ListRow[]
 }
 
-const EventsFakeData = [
+export const EventsFakeData = [
 	{
 		id: '1',
 		name: 'Trip 1',
@@ -128,32 +110,3 @@ const EventsFakeData = [
 		],
 	},
 ]
-
-export async function loader({ params }: LoaderArgs) {
-	const eventsData = EventsFakeData
-	invariantResponse(eventsData, ',event not found', { status: 404 })
-
-	return json(eventsData)
-}
-
-export const action = async ({ request, params }: ActionArgs) => {
-	console.log('action')
-
-	return null
-}
-
-export default function EventsIndexRoute() {
-	const eventsData = useLoaderData<Event[]>()
-
-	return (
-		<main>
-			<h1>Event</h1>
-			<p>fake event data</p>
-			{/* {eventsData.map(event => (
-				<li key={event.id}>
-					<Link to={`/events/${event.id}`}>{event.name}</Link>
-				</li>
-			))} */}
-		</main>
-	)
-}

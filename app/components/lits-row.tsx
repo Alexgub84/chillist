@@ -1,6 +1,6 @@
 import { Form, Link, useSubmit } from '@remix-run/react'
 
-import type { ListRow } from '../routes/events._index.tsx'
+import type { ListRow } from '#app/utils/fake-data.ts'
 
 export function ListRow({
 	list,
