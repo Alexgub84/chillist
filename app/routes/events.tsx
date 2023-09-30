@@ -12,7 +12,7 @@ import {
 
 import { prisma } from '../utils/db.server.ts'
 import { ListRow } from '#app/components/lits-row.tsx'
-import type { Event } from '#app/utils/fake-data.ts'
+import type { EventType } from '#app/utils/fake-data.ts'
 import { invariantResponse } from '#app/utils/misc.tsx'
 import { useState } from 'react'
 

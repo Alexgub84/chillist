@@ -1,27 +1,34 @@
-export interface ListRow {
+export interface ListRowType {
 	id: string
 	name: string
-	ownerName: string | undefined
-	price: number | undefined
+	ownerName: string
+	price: number
 	notes: string
 	amountType: 'units' | 'grams'
-	amount: number | undefined
+	amount: number
 	status: 'PENDING' | 'PURCHASED'
 	createdAt: Date
 	updatedAt: Date
 }
 
-export interface Event {
+export interface EventType {
 	id: string
 	name: string
-	participants: string[]
+	participants: Participant[]
 	startDate: Date
 	endDate: Date
 	createdAt: Date
 	eventOwner: string
-	lists: ListRow[]
+	lists: ListRowType[]
 }
 
+export interface Participant {
+	id: string
+	name: string
+	createdAt: Date
+	updatedAt: Date
+	eventId: string
+}
 export const EventsFakeData = [
 	{
 		id: '1',

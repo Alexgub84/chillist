@@ -1,12 +1,12 @@
 import { Form, Link, useSubmit } from '@remix-run/react'
 
-import type { ListRow } from '#app/utils/fake-data.ts'
+import type { ListRowType } from '#app/utils/fake-data.ts'
 
 export function ListRow({
 	list,
 	handleListEdited,
 }: {
-	list: ListRow
+	list: ListRowType
 	handleListEdited: (event: React.ChangeEvent<HTMLSelectElement>) => void
 }) {
 	return (

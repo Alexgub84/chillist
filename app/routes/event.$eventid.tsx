@@ -1,43 +1,53 @@
 import { EventsFakeData } from '#app/utils/fake-data.ts'
 import { LoaderArgs, json } from '@remix-run/node'
-import { Form, useLoaderData } from '@remix-run/react'
-import type { Event } from '#app/utils/fake-data.ts'
+import { Form, Link, useLoaderData } from '@remix-run/react'
+import type { EventType, ListRowType } from '#app/utils/fake-data.ts'
 import { ListRow } from '#app/components/lits-row.tsx'
+import { invariantResponse } from '#app/utils/misc.tsx'
 //loader
 export async function loader({ params }: LoaderArgs) {
 	console.log('params', params)
 	if (!params.eventid) return json({ event: null })
 
 	const event = EventsFakeData[0]
+	invariantResponse(event, ',event not found', { status: 404 })
 
-	return json({ event })
+	return json(event)
 }
 
 export default function EventId() {
-	const { event } = useLoaderData()
+	const event = useLoaderData<EventType>()
 
 	return (
 		<section>
 			<h1>Event data</h1>
 			<section>
-				<h2>{JSON.stringify(event.participants)}</h2>
+				<h2>{event.name}</h2>
+
 				<p>Event description</p>
 				<section>
-					{/* {event.participants.map(participant => (
-						<p>{participant.name}</p>
-					))} */}
+					<ul>
+						{(event.participants ?? []).map((participant: any) => (
+							<li>
+								<Link to={`/participant/${participant.id}`}>
+									{participant.name}
+								</Link>
+							</li>
+						))}
+					</ul>
 				</section>
 			</section>
-			{/* <Form method="post">
-				{eventData.lists.map(row => (
-					<div key={row.id}>{row.name}</div>
-					// <ListRow
-					// 	list={row}
-					// 	key={`list-row-${row.id}`}
-					// 	handleListEdited={() => {}}
-					// />
-				))}
-			</Form> */}
+			<Form method="post">
+				{event.lists.map(row => {
+					return (
+						<ListRow
+							list={row}
+							key={`list-row-${row.id}`}
+							handleListEdited={() => {}}
+						/>
+					)
+				})}
+			</Form>
 		</section>
 	)
 }
