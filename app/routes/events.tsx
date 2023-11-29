@@ -18,9 +18,9 @@ import { useState } from 'react'
 
 import { EventsFakeData } from '#app/utils/fake-data.ts'
 
-export async function loader({ params }: LoaderArgs) {
-	const eventsData = EventsFakeData
-	invariantResponse(eventsData, ',event not found', { status: 404 })
+export async function loader() {
+	const eventsData = await prisma.event.findMany()
+	// invariantResponse(eventsData, ',events not found', { status: 404 })
 
 	return json(eventsData)
 }
