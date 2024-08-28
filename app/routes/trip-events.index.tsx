@@ -32,9 +32,6 @@ export default function TripEventsRoute() {
 						<Link to={`/trip-event/${tripEvent.id}`}>{tripEvent.name}</Link>
 					</li>
 				))}
-				<li key="testtest">
-					<Link to={`/trip-event/alex`}>Alex</Link>
-				</li>
 			</ul>
 		</main>
 	)
