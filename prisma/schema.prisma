@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id            String     @id @default(cuid())
+  id            String     @id @default(uuid())
   name          String
   email         String     @unique
   createdAt     DateTime   @default(now())
@@ -34,9 +34,9 @@ model TripEvent {
 }
 
 model ListRow {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid())
   name       String
-  ownerName  String // Allow null values with the '?' modifier
+  ownerName  String? // Allow null values with the '?' modifier
   price      Float? // Use Float type to accommodate undefined values
   notes      String
   amountType String // Use string to represent 'units' or 'grams'
