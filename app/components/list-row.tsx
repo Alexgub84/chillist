@@ -2,7 +2,10 @@ import type { ListRow as ListRowType } from '@prisma/client'
 import clsx from 'clsx'
 
 interface ListRowProps {
-	list: ListRowType
+	list: Omit<ListRowType, 'createdAt' | 'updatedAt'> & {
+		createdAt: string | Date // Accept both string and Date types
+		updatedAt: string | Date // Accept both string and Date types
+	}
 	action: 'create' | 'update'
 }
 
