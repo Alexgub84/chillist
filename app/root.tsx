@@ -6,7 +6,6 @@ import {
 	type MetaFunction,
 } from '@remix-run/node'
 import {
-	Form,
 	Link,
 	Links,
 	LiveReload,
@@ -15,39 +14,24 @@ import {
 	Scripts,
 	ScrollRestoration,
 	useLoaderData,
-	useMatches,
-	useSubmit,
 } from '@remix-run/react'
 import { withSentry } from '@sentry/remix'
-import { useRef } from 'react'
+
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
-import { EpicProgress } from './components/progress-bar.tsx'
-import { SearchBar } from './components/search-bar.tsx'
-import { useToast } from './components/toaster.tsx'
-import { Button } from './components/ui/button.tsx'
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuPortal,
-	DropdownMenuTrigger,
-} from './components/ui/dropdown-menu.tsx'
-import { Icon, href as iconsHref } from './components/ui/icon.tsx'
-import { EpicToaster } from './components/ui/sonner.tsx'
+
+import { href as iconsHref } from './components/ui/icon.tsx'
 
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
-import { getUserId, logout } from './utils/auth.server.ts'
+
 import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
-import { prisma } from './utils/db.server.ts'
+
 import { getEnv } from './utils/env.server.ts'
 import { honeypot } from './utils/honeypot.server.ts'
-import { combineHeaders, getDomainUrl, getUserImgSrc } from './utils/misc.tsx'
+import { combineHeaders, getDomainUrl } from './utils/misc.tsx'
 import { useNonce } from './utils/nonce-provider.ts'
 import { type Theme, getTheme } from './utils/theme.server.ts'
-import { makeTimings, time } from './utils/timing.server.ts'
-import { getToast } from './utils/toast.server.ts'
-import { useOptionalUser, useUser } from './utils/user.ts'
+import { makeTimings } from './utils/timing.server.ts'
 
 export const links: LinksFunction = () => {
 	return [
