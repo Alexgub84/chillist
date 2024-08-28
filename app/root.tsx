@@ -9,6 +9,7 @@ import {
 	Form,
 	Link,
 	Links,
+	LiveReload,
 	Meta,
 	Outlet,
 	Scripts,
@@ -152,30 +153,31 @@ function App() {
 	const data = useLoaderData<typeof loader>()
 	const nonce = useNonce()
 
-	const matches = useMatches()
-
 	const allowIndexing = data.ENV.ALLOW_INDEXING !== 'false'
-	useToast(data.toast)
 
 	return (
 		<Document nonce={nonce} allowIndexing={allowIndexing} env={data.ENV}>
 			<div className="flex h-screen flex-col justify-between">
 				<header className="container py-6">
-					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
-						<Logo />
+					<nav className="flex items-center justify-between">
+						<Link to="/">
+							<div className="font-light">Home</div>
+						</Link>
+						<Link to="/trip-events">
+							<div className="font-light">Events</div>
+						</Link>
 					</nav>
 				</header>
 
 				<div className="flex-1">
 					<Outlet />
+					<LiveReload />
 				</div>
 
 				<div className="container flex justify-between pb-5">
 					<Logo />
 				</div>
 			</div>
-
-			<EpicProgress />
 		</Document>
 	)
 }
