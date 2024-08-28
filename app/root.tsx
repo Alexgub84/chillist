@@ -34,7 +34,7 @@ import {
 } from './components/ui/dropdown-menu.tsx'
 import { Icon, href as iconsHref } from './components/ui/icon.tsx'
 import { EpicToaster } from './components/ui/sonner.tsx'
-import { ThemeSwitch, useTheme } from './routes/resources+/theme-switch.tsx'
+
 import tailwindStyleSheetUrl from './styles/tailwind.css?url'
 import { getUserId, logout } from './utils/auth.server.ts'
 import { ClientHintCheck, getHints } from './utils/client-hints.tsx'
@@ -78,47 +78,11 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const timings = makeTimings('root loader')
-	const userId = await time(() => getUserId(request), {
-		timings,
-		type: 'getUserId',
-		desc: 'getUserId in root',
-	})
 
-	const user = userId
-		? await time(
-				() =>
-					prisma.user.findUniqueOrThrow({
-						select: {
-							id: true,
-							name: true,
-							username: true,
-							image: { select: { id: true } },
-							roles: {
-								select: {
-									name: true,
-									permissions: {
-										select: { entity: true, action: true, access: true },
-									},
-								},
-							},
-						},
-						where: { id: userId },
-					}),
-				{ timings, type: 'find user', desc: 'find user in root' },
-			)
-		: null
-	if (userId && !user) {
-		console.info('something weird happened')
-		// something weird happened... The user is authenticated but we can't find
-		// them in the database. Maybe they were deleted? Let's log them out.
-		await logout({ request, redirectTo: '/' })
-	}
-	const { toast, headers: toastHeaders } = await getToast(request)
 	const honeyProps = honeypot.getInputProps()
 
 	return json(
 		{
-			user,
 			requestInfo: {
 				hints: getHints(request),
 				origin: getDomainUrl(request),
@@ -128,14 +92,11 @@ export async function loader({ request }: LoaderFunctionArgs) {
 				},
 			},
 			ENV: getEnv(),
-			toast,
+
 			honeyProps,
 		},
 		{
-			headers: combineHeaders(
-				{ 'Server-Timing': timings.toString() },
-				toastHeaders,
-			),
+			headers: combineHeaders({ 'Server-Timing': timings.toString() }),
 		},
 	)
 }
@@ -190,38 +151,18 @@ function Document({
 function App() {
 	const data = useLoaderData<typeof loader>()
 	const nonce = useNonce()
-	const user = useOptionalUser()
-	const theme = useTheme()
+
 	const matches = useMatches()
-	const isOnSearchPage = matches.find((m) => m.id === 'routes/users+/index')
-	const searchBar = isOnSearchPage ? null : <SearchBar status="idle" />
+
 	const allowIndexing = data.ENV.ALLOW_INDEXING !== 'false'
 	useToast(data.toast)
 
 	return (
-		<Document
-			nonce={nonce}
-			theme={theme}
-			allowIndexing={allowIndexing}
-			env={data.ENV}
-		>
+		<Document nonce={nonce} allowIndexing={allowIndexing} env={data.ENV}>
 			<div className="flex h-screen flex-col justify-between">
 				<header className="container py-6">
 					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 						<Logo />
-						<div className="ml-auto hidden max-w-sm flex-1 sm:block">
-							{searchBar}
-						</div>
-						<div className="flex items-center gap-10">
-							{user ? (
-								<UserDropdown />
-							) : (
-								<Button asChild variant="default" size="lg">
-									<Link to="/login">Log In</Link>
-								</Button>
-							)}
-						</div>
-						<div className="block w-full sm:hidden">{searchBar}</div>
 					</nav>
 				</header>
 
@@ -231,10 +172,9 @@ function App() {
 
 				<div className="container flex justify-between pb-5">
 					<Logo />
-					<ThemeSwitch userPreference={data.requestInfo.userPrefs.theme} />
 				</div>
 			</div>
-			<EpicToaster closeButton position="top-center" theme={theme} />
+
 			<EpicProgress />
 		</Document>
 	)
@@ -264,66 +204,66 @@ function AppWithProviders() {
 
 export default withSentry(AppWithProviders)
 
-function UserDropdown() {
-	const user = useUser()
-	const submit = useSubmit()
-	const formRef = useRef<HTMLFormElement>(null)
-	return (
-		<DropdownMenu>
-			<DropdownMenuTrigger asChild>
-				<Button asChild variant="secondary">
-					<Link
-						to={`/users/${user.username}`}
-						// this is for progressive enhancement
-						onClick={(e) => e.preventDefault()}
-						className="flex items-center gap-2"
-					>
-						<img
-							className="h-8 w-8 rounded-full object-cover"
-							alt={user.name ?? user.username}
-							src={getUserImgSrc(user.image?.id)}
-						/>
-						<span className="text-body-sm font-bold">
-							{user.name ?? user.username}
-						</span>
-					</Link>
-				</Button>
-			</DropdownMenuTrigger>
-			<DropdownMenuPortal>
-				<DropdownMenuContent sideOffset={8} align="start">
-					<DropdownMenuItem asChild>
-						<Link prefetch="intent" to={`/users/${user.username}`}>
-							<Icon className="text-body-md" name="avatar">
-								Profile
-							</Icon>
-						</Link>
-					</DropdownMenuItem>
-					<DropdownMenuItem asChild>
-						<Link prefetch="intent" to={`/users/${user.username}/notes`}>
-							<Icon className="text-body-md" name="pencil-2">
-								Notes
-							</Icon>
-						</Link>
-					</DropdownMenuItem>
-					<DropdownMenuItem
-						asChild
-						// this prevents the menu from closing before the form submission is completed
-						onSelect={(event) => {
-							event.preventDefault()
-							submit(formRef.current)
-						}}
-					>
-						<Form action="/logout" method="POST" ref={formRef}>
-							<Icon className="text-body-md" name="exit">
-								<button type="submit">Logout</button>
-							</Icon>
-						</Form>
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenuPortal>
-		</DropdownMenu>
-	)
-}
+// function UserDropdown() {
+// 	const user = useUser()
+// 	const submit = useSubmit()
+// 	const formRef = useRef<HTMLFormElement>(null)
+// 	return (
+// 		<DropdownMenu>
+// 			<DropdownMenuTrigger asChild>
+// 				<Button asChild variant="secondary">
+// 					<Link
+// 						to={`/users/${user.username}`}
+// 						// this is for progressive enhancement
+// 						onClick={(e) => e.preventDefault()}
+// 						className="flex items-center gap-2"
+// 					>
+// 						<img
+// 							className="h-8 w-8 rounded-full object-cover"
+// 							alt={user.name ?? user.username}
+// 							src={getUserImgSrc(user.image?.id)}
+// 						/>
+// 						<span className="text-body-sm font-bold">
+// 							{user.name ?? user.username}
+// 						</span>
+// 					</Link>
+// 				</Button>
+// 			</DropdownMenuTrigger>
+// 			<DropdownMenuPortal>
+// 				<DropdownMenuContent sideOffset={8} align="start">
+// 					<DropdownMenuItem asChild>
+// 						<Link prefetch="intent" to={`/users/${user.username}`}>
+// 							<Icon className="text-body-md" name="avatar">
+// 								Profile
+// 							</Icon>
+// 						</Link>
+// 					</DropdownMenuItem>
+// 					<DropdownMenuItem asChild>
+// 						<Link prefetch="intent" to={`/users/${user.username}/notes`}>
+// 							<Icon className="text-body-md" name="pencil-2">
+// 								Notes
+// 							</Icon>
+// 						</Link>
+// 					</DropdownMenuItem>
+// 					<DropdownMenuItem
+// 						asChild
+// 						// this prevents the menu from closing before the form submission is completed
+// 						onSelect={(event) => {
+// 							event.preventDefault()
+// 							submit(formRef.current)
+// 						}}
+// 					>
+// 						<Form action="/logout" method="POST" ref={formRef}>
+// 							<Icon className="text-body-md" name="exit">
+// 								<button type="submit">Logout</button>
+// 							</Icon>
+// 						</Form>
+// 					</DropdownMenuItem>
+// 				</DropdownMenuContent>
+// 			</DropdownMenuPortal>
+// 		</DropdownMenu>
+// 	)
+// }
 
 export function ErrorBoundary() {
 	// the nonce doesn't rely on the loader so we can access that
