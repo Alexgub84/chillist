@@ -46,13 +46,7 @@ export function ListRow({ list, action, participants }: ListRowProps) {
 					</option>
 				))}
 			</select>
-			<input
-				type="text"
-				name="ownerName"
-				id="ownerName"
-				defaultValue={list.ownerName || ''}
-			/>
-
+		
 			<label htmlFor="price">Price: </label>
 			<input
 				type="number"
