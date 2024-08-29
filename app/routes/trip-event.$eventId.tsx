@@ -118,7 +118,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export default function EventRoute() {
 	const tripEvent = useLoaderData<LoaderData>()
-
+	const participantsNames = tripEvent.participants.map(
+		(participant) => participant.name,
+	)
 	const defaultListRowData = {
 		id: '',
 		name: '',
@@ -142,36 +144,35 @@ export default function EventRoute() {
 					<ul>
 						{(tripEvent.participants ?? []).map((participant: any) => (
 							<li key={`${participant.id}`}>
-								<Link to={`/participant/${participant.id}`}>
-									{participant.name}
-								</Link>
+								{/* <Link to={`/participant/${participant.id}`}> */}
+								{participant.name}
+								{/* </Link> */}
 							</li>
 						))}
 					</ul>
 				</section>
 			</section>
 
-			<ul>
-				{(tripEvent.participants ?? []).map((participant) => (
-					<li key={participant.id}>
-						{/* <Link to={`/participant/${participant.id}`}> */}
-						{participant.name}
-						{/* </Link> */}
-					</li>
-				))}
-			</ul>
 			<section className="gap-2">
 				{tripEvent.lists.map((list) => {
 					return (
 						<Form method="post" key={list.id}>
-							<ListRow list={list} action="update" />
+							<ListRow
+								list={list}
+								action="update"
+								participants={participantsNames}
+							/>
 						</Form>
 					)
 				})}
 			</section>
 			<h2 className="mt-2">Add new list item</h2>
 			<Form method="post">
-				<ListRow list={defaultListRowData} action="create" />
+				<ListRow
+					list={defaultListRowData}
+					action="create"
+					participants={participantsNames}
+				/>
 			</Form>
 		</section>
 	)

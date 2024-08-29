@@ -29,7 +29,9 @@ export default function TripEventsRoute() {
 			<ul>
 				{tripEventsData.map((tripEvent) => (
 					<li key={tripEvent.id}>
-						<Link to={`/trip-event/${tripEvent.id}`}>{tripEvent.name}</Link>
+						<Link className="underline" to={`/trip-event/${tripEvent.id}`}>
+							{tripEvent.name}
+						</Link>
 					</li>
 				))}
 			</ul>

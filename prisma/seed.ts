@@ -31,7 +31,7 @@ async function seed() {
 	const tripEvent = await prisma.tripEvent.create({
 		data: {
 			id: uuidv4(),
-			name: 'Our first trip',
+			name: 'Camping with kids',
 			participants: {
 				connect: [
 					{
@@ -52,8 +52,24 @@ async function seed() {
 	await prisma.listRow.create({
 		data: {
 			id: uuidv4(),
-			name: 'List Item 1',
+			name: 'Potatoes',
 			ownerName: 'Alex',
+			price: 10.5,
+			notes: 'Some notes',
+			amountType: 'units',
+			amount: 2,
+			status: 'PENDING',
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			tripEventId: tripEvent.id,
+		},
+	})
+
+	await prisma.listRow.create({
+		data: {
+			id: uuidv4(),
+			name: 'Apples',
+			ownerName: 'Kfir',
 			price: 10.5,
 			notes: 'Some notes',
 			amountType: 'units',

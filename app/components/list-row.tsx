@@ -6,10 +6,11 @@ interface ListRowProps {
 		createdAt: string | Date // Accept both string and Date types
 		updatedAt: string | Date // Accept both string and Date types
 	}
+	participants: string[]
 	action: 'create' | 'update'
 }
 
-export function ListRow({ list, action }: ListRowProps) {
+export function ListRow({ list, action, participants }: ListRowProps) {
 	const isCreating = action === 'create'
 
 	return (
@@ -33,7 +34,18 @@ export function ListRow({ list, action }: ListRowProps) {
 				readOnly={!isCreating} // Editable only if creating
 			/>
 
-			<label htmlFor="ownerName">Owner Name: </label>
+			<label htmlFor="ownerName">Owner: </label>
+			<select
+				name="ownerName"
+				id="ownerName"
+				defaultValue={list.ownerName || ''}
+			>
+				{participants.map((participant) => (
+					<option key={participant} value={participant}>
+						{participant}
+					</option>
+				))}
+			</select>
 			<input
 				type="text"
 				name="ownerName"
