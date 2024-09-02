@@ -2,12 +2,12 @@ import { json, redirect } from '@remix-run/node'
 import type { LoaderFunctionArgs, ActionFunctionArgs } from '@remix-run/node'
 import { Form, Link, useLoaderData } from '@remix-run/react'
 import { z } from 'zod'
-import { v4 as uuidv4 } from 'uuid'
 
 import type { Prisma } from '@prisma/client'
 
 import { prisma } from '#app/utils/db.server.ts'
 import { ListRow } from '#app/components/list-row.tsx'
+import { TripEventDetails } from '#app/components/trip-event-details.tsx'
 
 type LoaderData = Prisma.TripEventGetPayload<{
 	include: { participants: true; lists: true }
@@ -134,23 +134,24 @@ export default function EventRoute() {
 		updatedAt: new Date(),
 		tripEventId: tripEvent.id,
 	}
+
+	const tripEventDetails = {
+		name: tripEvent.name,
+		participants: tripEvent.participants.map((participant) => ({
+			...participant,
+			createdAt: new Date(participant.createdAt),
+			updatedAt: participant.updatedAt ? new Date(participant.updatedAt) : null,
+		})),
+		owner: tripEvent.owner || 'empty',
+		startDate: new Date(tripEvent.startDate),
+		endDate: new Date(tripEvent.endDate),
+		createdAt: new Date(tripEvent.createdAt),
+	}
+
 	return (
 		<section>
 			<section>
-				<h2>{tripEvent.name}</h2>
-
-				<p>Event description</p>
-				<section>
-					<ul>
-						{(tripEvent.participants ?? []).map((participant: any) => (
-							<li key={`${participant.id}`}>
-								{/* <Link to={`/participant/${participant.id}`}> */}
-								{participant.name}
-								{/* </Link> */}
-							</li>
-						))}
-					</ul>
-				</section>
+				<TripEventDetails tripEventDetails={tripEventDetails} />
 			</section>
 
 			<section className="gap-2">

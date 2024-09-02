@@ -46,7 +46,7 @@ export function ListRow({ list, action, participants }: ListRowProps) {
 					</option>
 				))}
 			</select>
-		
+
 			<label htmlFor="price">Price: </label>
 			<input
 				type="number"
