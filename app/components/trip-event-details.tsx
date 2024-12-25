@@ -7,6 +7,7 @@ interface TripEventDetailsProps {
 	startDate: Date
 	endDate: Date
 	createdAt: Date
+	id: string
 }
 
 export function TripEventDetails({
@@ -14,8 +15,6 @@ export function TripEventDetails({
 }: {
 	tripEventDetails: TripEventDetailsProps
 }) {
-	console.log(tripEventDetails)
-
 	return (
 		<section aria-label="trip event details" className="trip-event-details">
 			<div>
@@ -59,6 +58,11 @@ export function TripEventDetails({
 								defaultValue={participant.name}
 								required
 							/>
+							<a
+								href={`/trip-event/${tripEventDetails.id}/${participant.name}`}
+							>
+								link
+							</a>
 						</li>
 					))}
 				</ul>
@@ -73,9 +77,7 @@ export function TripEventDetails({
 					name="startDate"
 					id="startDate"
 					defaultValue={
-						new Date(tripEventDetails.startDate)
-							.toISOString()
-							.split('T')[0]
+						new Date(tripEventDetails.startDate).toISOString().split('T')[0]
 					}
 					required
 				/>

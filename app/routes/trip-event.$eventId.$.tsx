@@ -106,12 +106,20 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 }
 
 export async function loader({ params }: LoaderFunctionArgs) {
-	if (!params.eventId) return json({ event: null })
+	const { eventId, '*': participantId } = params
+	if (!eventId) return json({ event: null })
 
 	const tripEvent = await prisma.tripEvent.findUnique({
 		where: { id: params.eventId },
 		include: { participants: true, lists: true },
 	})
+	if (!tripEvent) return json({ event: null })
+
+	if (participantId) {
+		tripEvent.lists = tripEvent.lists.filter(
+			(list) => list.ownerName === participantId,
+		)
+	}
 
 	return json(tripEvent)
 }
@@ -136,6 +144,7 @@ export default function EventRoute() {
 	}
 
 	const tripEventDetails = {
+		id: tripEvent.id,
 		name: tripEvent.name,
 		participants: tripEvent.participants.map((participant) => ({
 			...participant,
